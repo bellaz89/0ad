@@ -85,7 +85,7 @@ bool VisualReplay::ReadCacheFile(const ScriptInterface& scriptInterface, JS::Mut
 	{
 		cachedReplaysObject.set(&cachedReplays.toObject());
 		bool isArray;
-		if (JS_IsArrayObject(cx, cachedReplaysObject, &isArray) && isArray)
+		if (JS::IsArrayObject(cx, cachedReplaysObject, &isArray) && isArray)
 			return true;
 	}
 
@@ -123,7 +123,7 @@ JS::HandleObject VisualReplay::ReloadReplayCache(const ScriptInterface& scriptIn
 	{
 		// Create list of files included in the cache
 		u32 cacheLength = 0;
-		JS_GetArrayLength(cx, cachedReplaysObject, &cacheLength);
+        JS::GetArrayLength(cx, cachedReplaysObject, &cacheLength);
 		for (u32 j = 0; j < cacheLength; ++j)
 		{
 			JS::RootedValue replay(cx);
@@ -139,7 +139,7 @@ JS::HandleObject VisualReplay::ReloadReplayCache(const ScriptInterface& scriptIn
 		}
 	}
 
-	JS::RootedObject replays(cx, JS_NewArrayObject(cx, 0));
+	JS::RootedObject replays(cx, JS::NewArrayObject(cx, 0));
 	DirectoryNames directories;
 
 	if (GetDirectoryEntries(GetDirectoryPath(), nullptr, &directories) != INFO::OK)
@@ -235,7 +235,7 @@ JS::Value VisualReplay::GetReplays(const ScriptInterface& scriptInterface, bool 
 	ScriptInterface::CreateArray(cx, &replaysWithoutNullEntries);
 
 	u32 replaysLength = 0;
-	JS_GetArrayLength(cx, replays, &replaysLength);
+    JS::GetArrayLength(cx, replays, &replaysLength);
 	for (u32 j = 0, i = 0; j < replaysLength; ++j)
 	{
 		JS::RootedValue replay(cx);
@@ -457,10 +457,10 @@ void VisualReplay::AddReplayToCache(const ScriptInterface& scriptInterface, cons
 
 	JS::RootedObject cachedReplaysObject(cx);
 	if (!ReadCacheFile(scriptInterface, &cachedReplaysObject))
-		cachedReplaysObject = JS_NewArrayObject(cx, 0);
+		cachedReplaysObject = JS::NewArrayObject(cx, 0);
 
 	u32 cacheLength = 0;
-	JS_GetArrayLength(cx, cachedReplaysObject, &cacheLength);
+    JS::GetArrayLength(cx, cachedReplaysObject, &cacheLength);
 	JS_SetElement(cx, cachedReplaysObject, cacheLength, replayData);
 
 	StoreCacheFile(scriptInterface, cachedReplaysObject);

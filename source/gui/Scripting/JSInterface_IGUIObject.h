@@ -156,7 +156,7 @@ namespace JSI_GUI
 		static bool scriptMethod(JSContext* cx, unsigned argc, JS::Value* vp);
 
 		std::map<std::string, JS::PersistentRootedFunction> m_FunctionHandlers;
-		static js::Class m_ProxyObjectClass;
+		static JSClass m_ProxyObjectClass;
 	};
 	class TextObjectFactory : public GUIObjectFactory
 	{

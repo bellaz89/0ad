@@ -42,7 +42,7 @@ public:
 	{
         CX_IN_REALM(cx,&m_ScriptInterface)
 		m_AIs.init(cx);
-		m_AIs = JS_NewArrayObject(cx, 0);
+		m_AIs = JS::NewArrayObject(cx, 0);
 	}
 
 	void Run()
@@ -69,7 +69,7 @@ public:
 		self->m_ScriptInterface.SetProperty(ai, "id", dirname, true);
 		self->m_ScriptInterface.SetProperty(ai, "data", data, true);
 		u32 length;
-		JS_GetArrayLength(cx, self->m_AIs, &length);
+        JS::GetArrayLength(cx, self->m_AIs, &length);
 		JS_SetElement(cx, self->m_AIs, length, ai);
 
 		return INFO::OK;

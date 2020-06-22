@@ -93,7 +93,7 @@ CStr CScriptStatsTable::GetCellText(size_t row, size_t col)
 	{
 		if (col == 0)
 			return "max JS_malloc bytes";
-		uint32_t n = JS_GetGCParameter(cx, JSGC_MAX_MALLOC_BYTES);
+		uint32_t n = 0; //JS_GetGCParameter(cx, JSGC_MAX_MALLOC_BYTES);
 		return CStr::FromUInt(n);
 	}
 	case Row_Bytes:

@@ -57,7 +57,7 @@ struct BuildDirEntListState
 		cur_idx(0)
 	{
         CX_IN_REALM(cx, si)
-		filename_array.init(cx, JS_NewArrayObject(cx, JS::HandleValueArray::empty()));
+		filename_array.init(cx, JS::NewArrayObject(cx, JS::HandleValueArray::empty()));
 	}
 };
 

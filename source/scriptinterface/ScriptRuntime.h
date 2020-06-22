@@ -89,7 +89,7 @@ private:
 	int m_LastGCBytes;
 	double m_LastGCCheck;
 
-	static void GCCallback(JSContext *rt, JSGCStatus status, void *data);
+	static void GCCallback(JSContext *rt, JSGCStatus status, JS::GCReason reason, void *data);
     
     JSRuntime* m_parentJSRuntime;
 };

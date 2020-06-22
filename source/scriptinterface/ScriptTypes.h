@@ -66,6 +66,8 @@
 #include "jsapi.h"
 #include "js/Initialization.h"
 #include "js/StructuredClone.h"
+#include "js/Array.h"
+#include "js/Class.h"
 
 //#ifdef TEMP_DEACTIVATED_DEBUG
 //#define DEBUG 

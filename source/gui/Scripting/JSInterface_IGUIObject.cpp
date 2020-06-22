@@ -192,7 +192,7 @@ bool JSI_GUI::GUIObjectFactory::scriptMethod(JSContext* cx, unsigned argc, JS::V
 	return true;
 }
 
-js::Class JSI_GUI::GUIObjectFactory::m_ProxyObjectClass = \
+JSClass JSI_GUI::GUIObjectFactory::m_ProxyObjectClass = \
 	PROXY_CLASS_DEF("GUIObjectProxy", JSCLASS_HAS_RESERVED_SLOTS(1) | JSCLASS_HAS_CACHED_PROTO(JSProto_Proxy));
 
 JSObject* JSI_GUI::GUIObjectFactory::CreateObject(JSContext* cx)
@@ -291,21 +291,21 @@ bool JSI_GUI::GUIProxy::set(JSContext* cx, JS::HandleObject proxy, JS::HandleId 
 	IGUIObject* e = static_cast<IGUIObject*>(ptr);
 
     if (!e)
-		return result.fail(JSMSG_NOT_NONNULL_OBJECT);
+		return result.fail(JSMSG_OBJECT_REQUIRED);
 
 	JS::RootedValue idval(cx);
 	if (!JS_IdToValue(cx, id, &idval))
-		return result.fail(JSMSG_NOT_NONNULL_OBJECT);
+		return result.fail(JSMSG_OBJECT_REQUIRED);
 
 	std::string propName;
 	if (!ScriptInterface::FromJSVal(cx, idval, propName))
-		return result.fail(JSMSG_UNDEFINED_PROP);
+		return result.fail(JSMSG_INVALID_CLASS_PROPERTY_NAME);
 
 	if (propName == "name")
 	{
 		std::string value;
 		if (!ScriptInterface::FromJSVal(cx, vp, value))
-			return result.fail(JSMSG_UNDEFINED_PROP);
+			return result.fail(JSMSG_INVALID_CLASS_PROPERTY_NAME);
 		e->SetName(value);
 		return result.succeed();
 	}
@@ -333,7 +333,7 @@ bool JSI_GUI::GUIProxy::set(JSContext* cx, JS::HandleObject proxy, JS::HandleId 
 		return e->m_Settings[propName]->FromJSVal(cx, vp, true) ? result.succeed() : result.fail(JSMSG_TYPEDOBJECT_BAD_ARGS);
 
 	JS_ReportErrorASCII(cx, "Property '%s' does not exist!", propName.c_str());
-	return result.fail(JSMSG_UNDEFINED_PROP);
+	return result.fail(JSMSG_INVALID_CLASS_PROPERTY_NAME);
 }
 
 bool JSI_GUI::GUIProxy::delete_(JSContext* cx, JS::HandleObject proxy, JS::HandleId id, JS::ObjectOpResult& result) const
@@ -341,15 +341,15 @@ bool JSI_GUI::GUIProxy::delete_(JSContext* cx, JS::HandleObject proxy, JS::Handl
     IGUIObject* e = static_cast<IGUIObject*>(js::GetProxyReservedSlot(proxy.get(), 0).toPrivate());
 
     if (!e)
-		return result.fail(JSMSG_NOT_NONNULL_OBJECT);
+		return result.fail(JSMSG_OBJECT_REQUIRED);
 
 	JS::RootedValue idval(cx);
 	if (!JS_IdToValue(cx, id, &idval))
-		return result.fail(JSMSG_NOT_NONNULL_OBJECT);
+		return result.fail(JSMSG_OBJECT_REQUIRED);
 
 	std::string propName;
 	if (!ScriptInterface::FromJSVal(cx, idval, propName))
-		return result.fail(JSMSG_UNDEFINED_PROP);
+		return result.fail(JSMSG_INVALID_CLASS_PROPERTY_NAME);
 
 	// event handlers
 	if (propName.substr(0, 2) == "on")
@@ -360,7 +360,7 @@ bool JSI_GUI::GUIProxy::delete_(JSContext* cx, JS::HandleObject proxy, JS::Handl
 	}
 
     JS_ReportErrorASCII(cx, "Only event handlers can be deleted from GUI objects!");
-	return result.fail(JSMSG_UNDEFINED_PROP);
+	return result.fail(JSMSG_INVALID_CLASS_PROPERTY_NAME);
 }
 
 

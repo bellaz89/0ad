@@ -28,7 +28,7 @@ void ErrorReporter(JSContext* cx, JSErrorReport* report)
 {
 
 	std::stringstream msg;
-	bool isWarning = JSREPORT_IS_WARNING(report->flags);
+	bool isWarning = report->isWarning();
 	msg << (isWarning ? "JavaScript warning: " : "JavaScript error: ");
 	if (report->filename)
 	{
@@ -129,7 +129,7 @@ void GCSliceCallbackHook(JSContext* UNUSED(rt), JS::GCProgress progress, const J
 	#endif
 }
 
-void ScriptRuntime::GCCallback(JSContext* UNUSED(rt), JSGCStatus status, void *data)
+void ScriptRuntime::GCCallback(JSContext* UNUSED(rt), JSGCStatus status, JS::GCReason UNUSED(reason), void *data)
 {
 	if (status == JSGC_END)
 		reinterpret_cast<ScriptRuntime*>(data)->GCCallbackMember();
@@ -162,7 +162,7 @@ ScriptRuntime::ScriptRuntime(shared_ptr<ScriptRuntime> parentRuntime, int runtim
     JS::SetGCSliceCallback(m_ctx, GCSliceCallbackHook);
 	JS_SetGCCallback(m_ctx, ScriptRuntime::GCCallback, this);
 
-	JS_SetGCParameter(m_ctx, JSGC_MAX_MALLOC_BYTES, m_RuntimeSize);
+	//JS_SetGCParameter(m_ctx, JSGC_MAX_MALLOC_BYTES, m_RuntimeSize);
 	JS_SetGCParameter(m_ctx, JSGC_MAX_BYTES, m_RuntimeSize);
 	JS_SetGCParameter(m_ctx, JSGC_MODE, JSGC_MODE_INCREMENTAL);
 
@@ -173,14 +173,14 @@ ScriptRuntime::ScriptRuntime(shared_ptr<ScriptRuntime> parentRuntime, int runtim
     JS_SetGlobalJitCompilerOption(m_ctx, JSJITCOMPILER_BASELINE_ENABLE, 1);
 
     JS::ContextOptionsRef(m_ctx)
-	    .setExtraWarnings(true)
-	    .setWerror(false)
+	//    .setExtraWarnings(true)
+	//    .setWerror(false)
 	    .setStrictMode(true);
 
     // JS_SetGCZeal(m_ctx, 6, 0);
 	// The whole heap-growth mechanism seems to work only for non-incremental GCs.
 	// We disable it to make it more clear if full GCs happen triggered by this JSAPI internal mechanism.
-	JS_SetGCParameter(m_ctx, JSGC_DYNAMIC_HEAP_GROWTH, false);
+	//JS_SetGCParameter(m_ctx, JSGC_DYNAMIC_HEAP_GROWTH, false);
 
 	ScriptEngine::GetSingleton().RegisterRuntime(m_rt);
 }

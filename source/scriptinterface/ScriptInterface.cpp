@@ -92,7 +92,7 @@ void ErrorReporter(JSContext* cx, JSErrorReport* report)
 {
 
 	std::stringstream msg;
-	bool isWarning = JSREPORT_IS_WARNING(report->flags);
+	bool isWarning = report->isWarning();
 	msg << (isWarning ? "JavaScript warning: " : "JavaScript error: ");
 	if (report->filename)
 	{
@@ -585,7 +585,7 @@ bool ScriptInterface::CreateObject_(JSContext* cx, JS::MutableHandleObject objec
 
 void ScriptInterface::CreateArray(JSContext* cx, JS::MutableHandleValue objectValue, size_t length)
 {
-	objectValue.setObjectOrNull(JS_NewArrayObject(cx, length));
+	objectValue.setObjectOrNull(JS::NewArrayObject(cx, length));
     checkJSError(cx);
 	if (!objectValue.isObject())
 		throw PSERROR_Scripting_CreateObjectFailed();
@@ -1292,7 +1292,7 @@ void ScriptInterface::ReportError(const char* message, const char* filename, siz
     JS::RootedString messageStr(cx, JS_NewStringCopyZ(cx, message));
     JS::RootedString filenameStr(cx, JS_NewStringCopyZ(cx, filename));
 
-    JS::AutoValueArray<3> args(cx);
+    JS::RootedValueArray<3> args(cx);
     args[0].setString(messageStr);
     args[1].setString(filenameStr);
     args[2].setInt32(lineno);
@@ -1324,7 +1324,7 @@ JS::Value ScriptInterface::CloneValueFromOtherContext(const ScriptInterface& oth
 }
 
 ScriptInterface::StructuredClone::StructuredClone() :
-	m_data(JS::StructuredCloneScope::SameProcessDifferentThread, NULL, NULL)
+	m_data(JS::StructuredCloneScope::SameProcess, NULL, NULL)
 {
 }
 

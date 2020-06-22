@@ -151,7 +151,7 @@ JS::Value CStdDeserializer::ReadScriptVal(const char* UNUSED(name), JS::HandleOb
 		{
 			u32 length;
 			NumberU32_Unbounded("array length", length);
-			obj.set(JS_NewArrayObject(cx, length));
+			obj.set(JS::NewArrayObject(cx, length));
 		}
 		else if (type == SCRIPT_TYPE_OBJECT)
 		{

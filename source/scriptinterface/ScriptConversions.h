@@ -25,7 +25,7 @@
 
 template<typename T> static void ToJSVal_vector(JSContext* cx, JS::MutableHandleValue ret, const std::vector<T>& val)
 {
-	JS::RootedObject obj(cx, JS_NewArrayObject(cx, 0));
+	JS::RootedObject obj(cx, JS::NewArrayObject(cx, 0));
 	if (!obj)
 	{
 		ret.setUndefined();
@@ -52,11 +52,11 @@ template<typename T> static bool FromJSVal_vector(JSContext* cx, JS::HandleValue
 
 	bool isArray;
 	obj = &v.toObject();
-	if ((!JS_IsArrayObject(cx, obj, &isArray) || !isArray) && !JS_IsTypedArrayObject(obj))
+	if ((!JS::IsArrayObject(cx, obj, &isArray) || !isArray) && !JS_IsTypedArrayObject(obj))
 		FAIL("Argument must be an array");
 
 	u32 length;
-	if (!JS_GetArrayLength(cx, obj, &length))
+	if (!JS::GetArrayLength(cx, obj, &length))
 		FAIL("Failed to get array length");
 
 	out.reserve(length);

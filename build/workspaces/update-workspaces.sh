@@ -42,7 +42,7 @@ with_system_premake5=false
 without_nvtt=false
 with_system_nvtt=false
 with_system_mozjs45=false
-with_system_mozjs68=false
+with_system_mozjs78=false
 enable_atlas=true
 
 for i in "$@"
@@ -51,7 +51,7 @@ do
     --with-system-premake5 ) with_system_premake5=true ;;
     --without-nvtt ) without_nvtt=true; premake_args="${premake_args} --without-nvtt" ;;
     --with-system-nvtt ) with_system_nvtt=true; premake_args="${premake_args} --with-system-nvtt" ;;
-    --with-system-mozjs68 ) with_system_mozjs68=true; premake_args="${premake_args} --with-system-mozjs68" ;;
+    --with-system-mozjs78 ) with_system_mozjs78=true; premake_args="${premake_args} --with-system-mozjs78" ;;
     --with-system-mozjs45 ) with_system_mozjs45=true; premake_args="${premake_args} --with-system-mozjs45" ;;
     --enable-atlas ) enable_atlas=true ;;
     --disable-atlas ) enable_atlas=false ;;

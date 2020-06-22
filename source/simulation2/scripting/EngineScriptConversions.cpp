@@ -166,7 +166,7 @@ template<> void ScriptInterface::ToJSVal<CFixedVector3D>(JSContext* cx, JS::Muta
 	if (!JS_GetProperty(cx, global, "Vector3D", &valueVector3D))
 		FAIL_VOID("Failed to get Vector3D constructor");
 
-	JS::AutoValueArray<3> args(cx);
+	JS::RootedValueArray<3> args(cx);
 	args[0].setNumber(val.X.ToDouble());
 	args[1].setNumber(val.Y.ToDouble());
 	args[2].setNumber(val.Z.ToDouble());
@@ -204,7 +204,7 @@ template<> void ScriptInterface::ToJSVal<CFixedVector2D>(JSContext* cx, JS::Muta
 	if (!JS_GetProperty(cx, global, "Vector2D", &valueVector2D))
 		FAIL_VOID("Failed to get Vector2D constructor");
 
-	JS::AutoValueArray<2> args(cx);
+	JS::RootedValueArray<2> args(cx);
 	args[0].setNumber(val.X.ToDouble());
 	args[1].setNumber(val.Y.ToDouble());
     JS::RootedObject retObj(cx);
@@ -265,11 +265,11 @@ template<> bool ScriptInterface::FromJSVal<TNSpline>(JSContext* cx, JS::HandleVa
 
 	JS::RootedObject obj(cx, &v.toObject());
 	bool isArray;
-	if (!JS_IsArrayObject(cx, obj, &isArray) || !isArray)
+	if (!JS::IsArrayObject(cx, obj, &isArray) || !isArray)
 		FAIL("Argument must be an array");
 
 	u32 numberOfNodes = 0;
-	if (!JS_GetArrayLength(cx, obj, &numberOfNodes))
+	if (!JS::GetArrayLength(cx, obj, &numberOfNodes))
 		FAIL("Failed to get array length");
 
 	for (u32 i = 0; i < numberOfNodes; ++i)

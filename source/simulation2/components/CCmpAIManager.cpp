@@ -565,7 +565,7 @@ public:
 			JS::RootedObject dataObj(cx, &mapData.toObject());
 
 			u32 length = 0;
-			ENSURE(JS_GetArrayLength(cx, dataObj, &length));
+			ENSURE(JS::GetArrayLength(cx, dataObj, &length));
 			u32 nbytes = (u32)(length * sizeof(NavcellData));
 
 			bool sharedMemory;
@@ -595,7 +595,7 @@ public:
 			JS::RootedObject dataObj(cx, &mapData.toObject());
 
 			u32 length = 0;
-			ENSURE(JS_GetArrayLength(cx, dataObj, &length));
+			ENSURE(JS::GetArrayLength(cx, dataObj, &length));
 			u32 nbytes = (u32)(length * sizeof(u8));
 
 			bool sharedMemory;
